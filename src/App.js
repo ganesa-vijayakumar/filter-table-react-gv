@@ -15,7 +15,7 @@ function App() {
     });
 
     if (searchWord === "") {
-      setFilteredData([]);
+      setFilteredData(data);
     } else {
       setFilteredData(newFilter);
     }
@@ -33,7 +33,7 @@ function App() {
           {filteredData.slice(0, 15).map((value, key) => {
             return (
               <a className="dataItem" href={value.link} target="_blank">
-                <p>{value.first_name} </p>
+                <p>{value.first_name} {key}</p>
               </a>
             );
           })}
