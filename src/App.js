@@ -1,34 +1,44 @@
 import React from 'react';
 import './style.css';
-import JSONDATA from './MOCK_DATA.json';
+import data from './MOCK_DATA.json';
 import { useState } from 'react';
 
 function App() {
-  const [searchTerm, setSearchTerm] = useState('');
+  const [filteredData, setFilteredData] = useState([]);
+  const [wordEntered, setWordEntered] = useState("");
+
+  const handleFilter = (event) => {
+    const searchWord = event.target.value;
+    setWordEntered(searchWord);
+    const newFilter = data.filter((value) => {
+      return value.first_name.toLowerCase().includes(searchWord.toLowerCase());
+    });
+
+    if (searchWord === "") {
+      setFilteredData([]);
+    } else {
+      setFilteredData(newFilter);
+    }
+  };
+
   return (
     <div>
       <input
         type="text"
         placeholder="Search..."
-        onChange={event => {
-          setSearchTerm(event.targer.value);
-        }}
+        onChange={handleFilter}
       />
-      {JSONDATA.filter(val => {
-        if (searchTerm == '') {
-          return val;
-        } else if (
-          val.first_name.toLowerCase().includes(searchTerm.toLowerCase())
-        ) {
-          return 'val';
-        }
-      }).map((val, key) => {
-        return (
-          <div key={key}>
-            <p>{val.first_name}</p>
-          </div>
-        );
-      })}
+      {filteredData.length != 0 && (
+        <div className="dataResult">
+          {filteredData.slice(0, 15).map((value, key) => {
+            return (
+              <a className="dataItem" href={value.link} target="_blank">
+                <p>{value.first_name} </p>
+              </a>
+            );
+          })}
+        </div>
+      )}
     </div>
   );
 }
